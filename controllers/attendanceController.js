@@ -64,11 +64,15 @@ exports.checkOutAttendance = catchAsync(async (req, res, next) => {
     const checkInTime = existingAttendance.checkInTime;
     const checkOutTime = Date.now();
     const workHoursMillis = checkOutTime - checkInTime;
+
     const totalMinutes = Math.floor(workHoursMillis / (1000 * 60));
-    
+    console.log(totalMinutes)
+    const hours = Math.floor(totalMinutes / 60); // Calculate total hours
+    const minutes = totalMinutes % 60; // Calculate remaining minutes
+
     const checkedOut = await Attendance.findByIdAndUpdate(existingAttendance._id, {
         checkOutTime: checkOutTime,
-        workMinutes: totalMinutes, 
+        workHoursAndMinutes: `${hours}hours ${minutes}minutes`, 
         notes: "CheckedOut Successfully"
     });
     if (!checkedOut) {

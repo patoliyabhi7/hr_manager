@@ -15,8 +15,8 @@ const attendanceSchema = new mongoose.Schema({
     checkOutTime: {
         type: Date
     },
-    workMinutes: {
-        type: Number
+    workHoursAndMinutes: {
+        type: String
     },
     notes: {
         type: String
