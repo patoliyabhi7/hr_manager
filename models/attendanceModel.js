@@ -1,19 +1,21 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose")
 
 const attendanceSchema = new mongoose.Schema({
     employee: {
         type: mongoose.Schema.ObjectId,
         ref: "Employee"
     },
+    date: {
+        type: String,
+        unique: false
+    },
     checkInTime: {
-        type: Date,
-        required: true
+        type: Date
     },
-    checkOutTime:{
-        type: Date,
-        required: true
+    checkOutTime: {
+        type: Date
     },
-    workHours: {
+    workMinutes: {
         type: Number
     },
     notes: {
