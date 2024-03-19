@@ -116,3 +116,34 @@ exports.getAttendanceByEmployeeId = catchAsync(async (req, res, next) => {
         }
     });
 })
+
+exports.getAllAttendance = catchAsync(async (req, res, next) => {
+    const allAttendance = await Attendance.find({});
+    if (!allAttendance || allAttendance.length === 0) {
+        return next(new AppError("No Attendance found", 404));
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: allAttendance
+        }
+    });
+})
+
+exports.getAttendanceByDate = catchAsync(async (req, res, next) => {
+    const date = req.body.date;
+    if (!date) {
+        return next(new AppError("Date is required", 400));
+    }
+    const attendance = await Attendance.find({ date: date });
+    if (!attendance || attendance.length === 0) {
+        return next(new AppError("No Attendance found for the date", 404));
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: attendance
+        }
+    });
+})
+
