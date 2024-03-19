@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose")
 
 const leaveSchema = new mongoose.Schema({
     employee: {
@@ -16,12 +16,16 @@ const leaveSchema = new mongoose.Schema({
         default: "Pending"
     },
     date: {
-        type: Date,
+        type: String,
         required: true
     },
     reason: {
         type: String,
         required: true
+    },
+    lastUpdatedBy:{
+        type: mongoose.Schema.ObjectId,
+        ref: "Employee"
     }
 })
 

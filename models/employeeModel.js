@@ -54,7 +54,9 @@ const empSchema = new mongoose.Schema({
         }
     },
     role: {
-        type: String
+        type: String,
+        enum: ['Employee', 'HR', 'Admin'],
+        default: "Employee"
     },
     favourite: {
         type: Boolean,

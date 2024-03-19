@@ -4,10 +4,6 @@ const User = require('./../models/employeeModel');
 const Attendance = require('./../models/attendanceModel');
 const { format } = require('date-fns');
 
-// create employee attendance
-// get current user attendance
-// get attendance by id of users
-
 exports.checkInAttendance = catchAsync(async (req, res, next) => {
     const employee = await User.findById(req.user?.id)
     // console.log(employee_id)
@@ -57,7 +53,7 @@ exports.checkOutAttendance = catchAsync(async (req, res, next) => {
     if (!existingAttendance || !existingAttendance.checkInTime) {
         return next(new AppError("You have not checkedIn for today", 400));
     }
-    if(existingAttendance.checkOutTime){
+    if (existingAttendance.checkOutTime) {
         return next(new AppError("You have already checkedOut for today", 400));
     }
 
@@ -72,9 +68,10 @@ exports.checkOutAttendance = catchAsync(async (req, res, next) => {
 
     const checkedOut = await Attendance.findByIdAndUpdate(existingAttendance._id, {
         checkOutTime: checkOutTime,
-        workHoursAndMinutes: `${hours}hours ${minutes}minutes`, 
+        workHoursAndMinutes: `${hours} hours ${minutes} minutes`,
         notes: "CheckedOut Successfully"
     });
+
     if (!checkedOut) {
         return next(new AppError("Something went wrong while CheckOut the employee", 500));
     }
@@ -85,3 +82,37 @@ exports.checkOutAttendance = catchAsync(async (req, res, next) => {
         }
     });
 });
+
+exports.getCurrentUserAttendance = catchAsync(async (req, res, next) => {
+    const employee = await User.findById(req.user?.id);
+    if (!employee) {
+        return next(new AppError("Employee not found or not LoggedIn", 404));
+    }
+    const allAttendance = await Attendance.find({ employee: employee._id });
+    if (!allAttendance || allAttendance.length === 0) {
+        return next(new AppError(`No Attendance found for Name: ${employee.firstname} `, 404));
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: allAttendance
+        }
+    });
+})
+
+exports.getAttendanceByEmployeeId = catchAsync(async (req, res, next) => {
+    const employee = await User.findById(req.params.id);
+    if (!employee) {
+        return next(new AppError("Employee ID Invalid. Enter valid Employee ID", 404));
+    }
+    const attendance = await Attendance.find({ employee: employee._id });
+    if (!attendance || attendance.length === 0) {
+        return next(new AppError(`No Attendance found for Name: ${employee.firstname} `, 404));
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: attendance
+        }
+    });
+})

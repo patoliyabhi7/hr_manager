@@ -2,6 +2,7 @@ const express = require('express')
 
 const employeeRouter = require('./routes/employeeRoutes.js');
 const attendanceRouter = require('./routes/attendanceRoutes.js');
+const leaveRouter = require('./routes/leaveRoutes.js');
 const AppError = require('./utils/appError');
 
 const app = express();
@@ -12,6 +13,7 @@ app.use((req,res,next)=>{
 })
 app.use('/api/v1/employee', employeeRouter);
 app.use('/api/v1/attendance', attendanceRouter);
+app.use('/api/v1/leave', leaveRouter);
 
 // app.all('*', (req,res,next)=>{
 //     next(new AppError(`Can't find ${req.originalUrl} on this server`))
