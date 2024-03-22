@@ -183,7 +183,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     if (req.body.password || req.body.passwordConfirm) {
         return next(new AppError('This route is not for password update. Please use /updatePassword', 400))
     }
-    const filteredBody = filterObj(req.body, 'firstname', 'lastname', 'dob', 'phone', 'email', 'favourite', 'role')
+    const filteredBody = filterObj(req.body, 'firstname', 'lastname', 'dob', 'phone', 'email', 'favourite')
 
     if (req.email !== req.body.email) {
         const user = await User.findOne({ email: req.body.email })
